@@ -1,5 +1,7 @@
 # Stupidboy's personalization
 /resources/*
+*.swp
+*.
 
 # Prerequisites
 *.d

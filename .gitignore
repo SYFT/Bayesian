@@ -1,7 +1,18 @@
 # Stupidboy's personalization
 /resources/*
 *.swp
+*.cpp~
+*.gitignore~
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vim
+# temporary
+.netrwhist
 *~
+# auto-generated tag files
+tags
 
 # Prerequisites
 *.d

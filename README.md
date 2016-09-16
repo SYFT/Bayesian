@@ -1,2 +1,2 @@
 # NaiveBayesian
-Navie Bayesian algorithm learning. For words partitial and classification.
+Naive or improved Bayesian algorithm learning. For words partitial and classification.

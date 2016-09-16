@@ -1,5 +1,6 @@
 # Stupidboy's personalization
 /resources/*
+/data/*
 *.swp
 *.cpp~
 *.gitignore~
@@ -43,6 +44,8 @@ tags
 *.lib
 
 # Executables
+*.gch
 *.exe
 *.out
 *.app
+

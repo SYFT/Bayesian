@@ -1,6 +1,7 @@
 # Stupidboy's personalization
 /resources/*
 /data/*
+/result/*
 *.swp
 *.cpp~
 *.gitignore~

@@ -1,3 +1,6 @@
+#ifndef ACAUTO_H
+#define ACAUTO_H
+
 #include "config.h"
 #include <map>
 #include <cwchar>
@@ -7,7 +10,7 @@
 using namespace std;
 
 class ACAuto {
-	static const int N = 5010 * 12;
+	static const int N = 4010 * 12;
 	private :
 		class Node {
 			public :
@@ -24,7 +27,8 @@ class ACAuto {
 
 	public :
 		ACAuto() {
-			rot = tot = 0;
+			rot = 0, tot = 1;
+			tr[rot].dangerLen = 0, tr[rot].fail = 0;
 		}
 
 		void addWstring(const wstring &str);
@@ -36,3 +40,4 @@ class ACAuto {
 
 #include "acauto.cpp"
 
+#endif

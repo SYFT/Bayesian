@@ -1,4 +1,5 @@
 #include "config.h"
+#include <algorithm>
 #include <map>
 #include <cwctype>
 #include <cwchar>
@@ -9,7 +10,7 @@ using namespace std;
 
 map<ull, int> counts[5];
 
-inline void solve(const wstring &str) {
+void solve(const wstring &str) {
 	static int w[1 << 16], n;
 	int m = sz(str);
 	n = 0;
@@ -22,12 +23,18 @@ inline void solve(const wstring &str) {
 
 	for(int i = 0; i < n; ++i) {
 		ull key = 0;
-		for(int len = 1; len <= 3; ++len) {
+		for(int len = 1; len <= 4; ++len) {
 			if(i + len > n) break;
 			key = (key << 16) | w[i + len - 1];
 			++counts[len][key];
 		}
 	}
+}
+
+void decrypt(ull s, int w[], int &n) {
+	for(n = 0; s; s >>= 16)
+		for(int x = s & 65535; x; x >>= 8) w[n++] = x & 255;
+	reverse(w, w + n);
 }
 
 int main() {
@@ -41,10 +48,19 @@ int main() {
 		solve(str);
 		if(++cntSentences % 100000 == 0) {
 			printf("%d\n", cntSentences);
-			for(int i = 1; i < 4; ++i)
+			for(int i = 1; i < 5; ++i)
 				printf("%d ", sz(counts[i]));
 			puts("");
+			if(cntSentences > 10000000) break;
 		}
+	}
+
+	foreach(w, counts[1]) {
+		int a[4], len;
+		decrypt(w->first, a, len);
+		for(int i = 0; i < len; ++i) out << (wchar_t) a[i];
+		out << " " << w->second << endl;
+		out << flush;
 	}
 	in.close(), out.close();
 	return 0;

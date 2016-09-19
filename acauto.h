@@ -36,6 +36,10 @@ class ACAuto {
 		void build();
 
 		void mark(const wstring &str, int *danger);
+
+		int size() const {
+			return tot;
+		}
 } ;
 
 #include "acauto.cpp"

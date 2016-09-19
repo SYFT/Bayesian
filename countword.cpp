@@ -8,7 +8,8 @@
 #include <sstream>
 using namespace std;
 
-map<ull, int> counts[5];
+const int MAXN = 4;
+map<ull, int> counts[MAXN + 1];
 
 void solve(const wstring &str) {
 	static int w[1 << 16], n;
@@ -23,7 +24,7 @@ void solve(const wstring &str) {
 
 	for(int i = 0; i < n; ++i) {
 		ull key = 0;
-		for(int len = 1; len <= 4; ++len) {
+		for(int len = 1; len <= MAXN; ++len) {
 			if(i + len > n) break;
 			key = (key << 16) | w[i + len - 1];
 			++counts[len][key];
@@ -48,21 +49,51 @@ int main() {
 		solve(str);
 		if(++cntSentences % 100000 == 0) {
 			printf("%d\n", cntSentences);
-			for(int i = 1; i < 5; ++i)
+			for(int i = 1; i <= MAXN; ++i)
 				printf("%d ", sz(counts[i]));
 			puts("");
-			if(cntSentences > 10000000) break;
+			if(cntSentences > 5000000) break;
 		}
 	}
+	in.close();
 
-	foreach(w, counts[1]) {
-		int a[4], len;
-		decrypt(w->first, a, len);
-		for(int i = 0; i < len; ++i) out << (wchar_t) a[i];
-		out << " " << w->second << endl;
-		out << flush;
+	int countwords = 0;
+	for(int length = MAXN; length >= 1; --length) {
+		foreach(w, counts[length]) {
+			int a[10], len;
+			decrypt(w->first, a, len);
+			ull firstword = a[0];
+			if(a[0] > 128 && len > 1)
+				firstword = (firstword << 8) | a[1];
+			double p = w->second * 1. / counts[1][firstword];
+			if(p > 0.15 && w->second > 150) {
+				for(int i = 0; i < len; ++i)
+					out << (wchar_t) a[i];
+				out << " " << ++countwords << endl;
+				out << flush;
+
+				int b[4], idx = 0;
+				for(int i = 0; i < length; ++i) {
+					b[i] = 0;
+					if(idx < len) {
+						b[i] = a[idx++];
+						if(b[i] > 128 && idx < len)
+							b[i] = (b[i] << 8) | a[idx++];
+					}
+				}
+				for(int _length = length - 1; _length >= 2; --_length) {
+					for(int head = 0; head < length; ++head) {
+						if(head + _length > length) break;
+						ull code = 0;
+						for(int i = 0; i < _length; ++i)
+							code = (code << 16) | b[i + head];
+						counts[_length][code] -= w->second;
+					}
+				}
+			}
+		}
 	}
-	in.close(), out.close();
+	out.close();
 	return 0;
 }
 

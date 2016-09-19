@@ -61,10 +61,7 @@ void ACAuto::mark(const wstring &str, int *danger) {
 		if(tr[now].child.count(ch)) now = tr[now].child[ch];
 		else now = rot;
 
-		// since each wchar occupies two char spaces.
-		// So only the odd index position represent
-		// a complete wchar.
-		if(idx & 1) danger[idx] = tr[now].dangerLen;
+		danger[idx] = tr[now].dangerLen;
 	}
 }
 

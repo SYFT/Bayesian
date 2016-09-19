@@ -22,6 +22,7 @@ void buildACAuto(ACAuto &ac, wifstream &in) {
 		// 	out << str << endl;
 	}
 	ac.build();
+	printf("%d\n", ac.size());
 }
 
 void cutText(ACAuto &ac, wifstream &in, wofstream &out) {

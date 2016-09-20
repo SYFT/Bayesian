@@ -8,7 +8,7 @@ using namespace std;
 int main() {
 	ios::sync_with_stdio(false);
 	wifstream in("data\\origindata.txt", wifstream::in);
-	wofstream out("result\\content.txt", wofstream::out);
+	wofstream out("data\\content.txt", wofstream::out);
 	wstring data;
 	wstring ret;
 	for(int lineIndex = 1; ; ++lineIndex) {

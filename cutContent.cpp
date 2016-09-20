@@ -55,7 +55,7 @@ int main() {
 	ios::sync_with_stdio(false);
 	wifstream stopwords("data\\stopword.txt", wifstream::in);
 	wifstream in("data\\content.txt", wifstream::in);
-	wofstream out("result\\formatcontent.txt", wofstream::out);
+	wofstream out("data\\formatcontent.txt", wofstream::out);
 	ACAuto ac;
 	buildACAuto(ac, stopwords);
 	stopwords.close();

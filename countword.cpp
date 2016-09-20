@@ -38,13 +38,23 @@ void decrypt(ull s, int w[], int &n) {
 	reverse(w, w + n);
 }
 
+inline void clear(int limit) {
+	for(int i = MAXN; i >= 1; --i) {
+		map<ull, int>::iterator it = counts[i].begin();
+		while(it != counts[i].end()) {
+			if(it->second < limit) counts[i].erase(it++);
+			else ++it;
+		}
+	}
+}
+
 int main() {
 	wifstream in("data\\formatcontent.txt", wifstream::in);
-	wofstream out("result\\words.txt", wofstream::out);
+	wofstream out("data\\words.txt", wofstream::out);
 	ios::sync_with_stdio(false);
 	for(int len = 0; len < 5; ++len) counts[len].clear();
 	wstring str;
-	int cntSentences = 0;
+	int cntSentences = 0, lowerbound = 20;
 	while(in >> str) {
 		solve(str);
 		if(++cntSentences % 100000 == 0) {
@@ -52,13 +62,19 @@ int main() {
 			for(int i = 1; i <= MAXN; ++i)
 				printf("%d ", sz(counts[i]));
 			puts("");
-			if(cntSentences > 5000000) break;
+			if(cntSentences % 2000000 == 0) {
+				clear(lowerbound);
+				lowerbound = lowerbound * 3 / 2;
+			}
+
+			if(cntSentences > 10000000) break;
 		}
 	}
 	in.close();
 
 	int countwords = 0;
-	for(int length = MAXN; length >= 1; --length) {
+	double baselimit = 0.15, decress = 0.99;
+	for(int length = MAXN; length >= 1; --length, baselimit *= decress) {
 		foreach(w, counts[length]) {
 			int a[10], len;
 			decrypt(w->first, a, len);
@@ -66,10 +82,10 @@ int main() {
 			if(a[0] > 128 && len > 1)
 				firstword = (firstword << 8) | a[1];
 			double p = w->second * 1. / counts[1][firstword];
-			if(p > 0.15 && w->second > 150) {
+			if(p > baselimit && w->second > 150) {
 				for(int i = 0; i < len; ++i)
 					out << (wchar_t) a[i];
-				out << " " << ++countwords << endl;
+				out << " " << ++countwords << " " << p << " " << w->second << endl;
 				out << flush;
 
 				int b[4], idx = 0;

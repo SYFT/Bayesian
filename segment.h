@@ -3,23 +3,34 @@
 
 #include <vector>
 #include "config.h"
-#include "global.h"
 #include <map>
 using namespace std;
 
-class SlowSegment {
+class Segment {
 	private :
-		static wstring result;
+		map<wstring, int> index;
+		map<Related, int> relation;
+		ll totWords;
 
 	public :
-		static void bayesianScore(const vector<int> &words) ;
 
-		static void cut(const wstring &data, int pos) ;
+		class SlowSegment {
+			private :
+				static wstring result;
+				static double maxScore;
 
-		static wstring segment(const wstring &originData) ;
-};
+			public :
+				static void bayesianScore(const vector<wstring> &) ;
 
-wstring slowSegment(const wstring &sentence) ;
+				static void cut(const wstring &, int, vector<int> &) ;
+
+				static wstring segment(const wstring &) ;
+		};
+
+		void init() ;
+
+		wstring slowSegment(const wstring &sentence) ;
+} ;
 
 #endif
 

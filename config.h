@@ -16,5 +16,17 @@ typedef unsigned long long ull;
 const char GLOSSARY[] = "data\\glossary.txt";
 const char RELATIONSHIP[] = "data\\relation.txt";
 
+#include <map>
+
+using namespace std;
+
+typedef pair<int, int> Related;
+
+void loadGlossary(map<wstring, int> &) ;
+
+void loadRelation(map<int, int> &, const map<wstring, int> &) ;
+
+void loadGlossaryAndRelation(map<wstring, int> &, map<int, int> &);
+
 #endif
 

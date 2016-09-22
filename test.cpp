@@ -6,26 +6,30 @@
 #include <algorithm>
 #include <cwctype>
 #include <cstring>
+#include "config.h"
+#include <sstream>
+#include <fstream>
 using namespace std;
 
 int main() {
-	freopen("data\\stopword.txt", "r", stdin);
-	freopen("result\\test.out", "w", stdout);
+	wifstream in("data\\relation.txt", wifstream::in);
+	wofstream out("data\\test.txt", wofstream::out);
+	ios::sync_with_stdio(false);
 	setlocale(LC_ALL, "chs");
-	// wchar_t ch;
-	// wcin >> ch;
-	// wcout << (int) ch << endl;
-	// wcout << ch << endl;
-	// locale loc("Chinese-simplified");
-	// wcin.imbue(loc), wcout.imbue(loc);
-	wstring chr;
-	wcin >> chr;
-#define sz(x) ((int) (x).size())
-	int maxx = 0;
-	while(getline(wcin, chr))
-		maxx = max(maxx, sz(chr));
-	wcout << maxx << endl;
-	// wcout << ch << endl;
+	wstring lines, str;
+	int cntSentences = 0;
+	while(getline(in, lines)) {
+		wstringstream input(lines, wstringstream::in);
+		input >> str;
+		int pos = str.find((wchar_t) '-');
+		out << str.substr(0, pos) << " ";
+		out << str.substr(pos + 1, sz(str) - pos) << " ";
+		input >> str;
+		out << str << endl;
+
+		if(++cntSentences % 100) out << flush;
+	}
+	in.close(), out.close();
 	return 0;
 }
 

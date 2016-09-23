@@ -10,15 +10,12 @@ double Segment::SlowSegment::maxScore;
 
 void Segment::SlowSegment::bayesianScore(const vector<int> &segs) {
 	int len = sz(segs);
-	puts("segs:");
-	for(int i = 0; i < len; ++i) printf("%d ", segs[i]);
-	puts("");
+	// puts("segs:");
+	// for(int i = 0; i < len; ++i) printf("%d ", segs[i]);
+	// puts("");
 	if(!len) return;
 
 	double p = 1.;
-	if(counts.count(segs[0]) == 0)
-		p *= unseen / (totWords * 1. * totWords * UNSEENWORDRATIO);
-	else p *= counts[segs[0]] / (totWords * 1.);
 	for(int i = 1, lastWord = totWords + 1; i < len; ++i) {
 		if(counts.count(lastWord)) {
 			Related tmp(lastWord, segs[i]);
@@ -38,7 +35,7 @@ void Segment::SlowSegment::bayesianScore(const vector<int> &segs) {
 
 		lastWord = segs[i];
 	}
-	printf("%.5lf\n", p);
+	// printf("%.5lf\n", p);
 
 	if(p > maxScore) {
 		maxScore = p;
@@ -50,6 +47,9 @@ void Segment::SlowSegment::bayesianScore(const vector<int> &segs) {
 			result += tmp;
 			result.push_back((wchar_t) '/');
 		}
+		wofstream out("data\\debug.txt", wofstream::out|wofstream::app);
+		out << "result:" << result << endl;
+		out.close();
 	}
 }
 
@@ -63,10 +63,6 @@ void Segment::SlowSegment::cut(
 
 		for(int len = 2; pos + len <= n; ++len) {
 			wstring tmp = Global::toWstring(w + pos, len);
-
-			wofstream out("data\\debug.txt", wofstream::app);
-			out << pos << " " << len << " " << tmp << endl;
-			out.close();
 
 			if(index.count(tmp)) {
 				int idx = index[tmp];
@@ -83,10 +79,10 @@ wstring Segment::SlowSegment::segment(const wstring &originData) {
 	static int w[Global::MAXSYMBOLS], len;
 	Global::toArray(originData, w, len);
 
-	for(int i = 0; i < len; ++i) printf("%dd ", w[i]);
-	puts("");
-	foreach(w, Global::symbols) printf("%d ", *w);
-	puts("");
+	// for(int i = 0; i < len; ++i) printf("%dd ", w[i]);
+	// puts("");
+	// foreach(w, Global::symbols) printf("%d ", *w);
+	// puts("");
 
 
 	for(int i = 0, tpos = 0; i <= len; ++i)
@@ -96,11 +92,14 @@ wstring Segment::SlowSegment::segment(const wstring &originData) {
 			cut(w + tpos, 0, i - tpos, segs);
 			tpos = i + 1;
 
-			printf("%d %.5lf %ls\n", tpos, maxScore, result.c_str());
+			// printf("%d %.5lf %ls\n", tpos, maxScore, result.c_str());
 
 			wstring theSymbol;
 			if(i < len) theSymbol = Global::toWstring(w + i, 1);
 			ret += result + theSymbol;
+			wofstream out("data\\debug.txt", wofstream::out|wofstream::app);
+			out << "ret:" << ret << endl;
+			out.close();
 		}
 	return ret;
 }
@@ -114,7 +113,10 @@ void Segment::init() {
 	puts("Begin to initialize.");
 
 	puts("Initializing words...");
-	unseen = 0, totWords = 0, backMap.clear();
+	backMap.clear();
+	foreach(w, index) backMap[w->second] = w->first;
+
+	unseen = 0, totWords = 0;
 	foreach(w, counts) {
 		totWords += w->second;
 		if(w->second > 1 && w->second < 9) {
@@ -122,7 +124,6 @@ void Segment::init() {
 			unseen += w->second - newCount;
 			w->second = newCount;
 		}
-		backMap[w->second] = w->first;
 	}
 	puts("Words done.");
 
@@ -141,6 +142,9 @@ void Segment::init() {
 
 wstring Segment::slowSegment(const wstring &sentence) {
 	wstring ret = SlowSegment::segment(sentence);
+	wofstream out("data\\debug.txt", wofstream::out|wofstream::app);
+	out << "ret_:" << ret << endl;
+	out.close();
 	return ret;
 }
 

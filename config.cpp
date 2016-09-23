@@ -56,18 +56,14 @@ wstring Global::toWstring(const int state) {
 
 void Global::loadGlossary(map<wstring, int> &ret, 
 		map<int, int> &counts) {
-	wifstream inpu("data\\glossary.txt", wifstream::in);
+	wifstream inpu(GLOSSARY, wifstream::in);
 	ret.clear(), counts.clear();
 
 	wstring line;
 	int totWord = 0;
 	totWords = 0;
 
-	static int pp[1234], n;
-
 	while(getline(inpu, line)) {
-		output << line << endl;
-
 		wstring word;
 		int x;
 		wstringstream input(line, wstringstream::in);

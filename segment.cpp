@@ -16,7 +16,7 @@ void Segment::SlowSegment::bayesianScore(const vector<int> &segs) {
 	if(!len) return;
 
 	double p = 1.;
-	for(int i = 1, lastWord = totWords + 1; i < len; ++i) {
+	for(int i = 0, lastWord = totWords + 1; i < len; ++i) {
 		if(counts.count(lastWord)) {
 			Related tmp(lastWord, segs[i]);
 			if(relation.count(tmp))
@@ -30,7 +30,7 @@ void Segment::SlowSegment::bayesianScore(const vector<int> &segs) {
 				p *= counts[segs[i]] / (totWords * 1.);
 			else
 				p *= unseen / 
-					(totWords * 1. * totWords * UNSEENWORDRATIO);
+					(totWords * 1. * totWords * UNSEENWORD);
 		}
 
 		lastWord = segs[i];

@@ -8,9 +8,9 @@ using namespace std;
 
 class Segment {
 	private :
-		static const double UNSEENWORDRATIO = 0.3,
+		static const double UNSEENWORD = 0.1,
 					 DECOUNT = 0.9,
-					 UNSEENRELATION = 0.4;
+					 UNSEENRELATION = 0.05;
 
 		static map<wstring, int> index;
 		static map<int, wstring> backMap;

@@ -21,29 +21,35 @@ const char SYMBOL[] = "data\\symbols.txt";
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <cmath>
 using namespace std;
 
 typedef pair<int, int> Related;
 
 class Global {
-	private :
+	public :
 		static vector<int> symbols;
 		static const int MAXSYMBOLS = 510;
 		static ll totWords;
 
-	public :
 		static void loadSymbols();
 
 		static bool isSymbol(const int);
 
 		static void toArray(const wstring&, int*, int&);
 
-		static void loadGlossary(map<int, int>&);
+		static wstring toWstring(const int*, int);
+
+		static wstring toWstring(const int x);
+
+		static void loadGlossary(map<wstring, int>&, map<int, int>&);
 
 		static void loadRelation(map<Related, int>&, 
-				const map<int, int>&);
+				map<wstring, int>&);
 
-		static void loadAll(map<int, int>&, 
+		static void loadAll(map<wstring, int>&, 
 				map<int, int>&, map<Related, int>&);
 } ;
 

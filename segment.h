@@ -8,9 +8,16 @@ using namespace std;
 
 class Segment {
 	private :
-		map<wstring, int> index;
-		map<Related, int> relation;
-		ll totWords;
+		static const double UNSEENWORDRATIO = 0.3,
+					 DECOUNT = 0.9,
+					 UNSEENRELATION = 0.4;
+
+		static map<wstring, int> index;
+		static map<int, wstring> backMap;
+		static map<int, int> counts;
+		static map<Related, int> relation;
+		static map<int, int> unseenRelation;
+		static ll totWords, unseen;
 
 	public :
 
@@ -20,17 +27,19 @@ class Segment {
 				static double maxScore;
 
 			public :
-				static void bayesianScore(const vector<wstring> &) ;
+				static void bayesianScore(const vector<int>&);
 
-				static void cut(const wstring &, int, vector<int> &) ;
+				static void cut(const int*, int, int, vector<int>&);
 
 				static wstring segment(const wstring &) ;
 		};
 
-		void init() ;
+		static void init() ;
 
-		wstring slowSegment(const wstring &sentence) ;
+		static wstring slowSegment(const wstring &sentence) ;
 } ;
+
+#include "segment.cpp"
 
 #endif
 

@@ -8,27 +8,25 @@
 #include <cstring>
 #include "config.h"
 #include <sstream>
+#include "segment.h"
 #include <fstream>
 using namespace std;
 
 int main() {
-	wifstream in("data\\relation.txt", wifstream::in);
-	wofstream out("data\\test.txt", wofstream::out);
-	ios::sync_with_stdio(false);
-	setlocale(LC_ALL, "chs");
-	wstring lines, str;
-	int cntSentences = 0;
-	while(getline(in, lines)) {
-		wstringstream input(lines, wstringstream::in);
-		input >> str;
-		int pos = str.find((wchar_t) '-');
-		out << str.substr(0, pos) << " ";
-		out << str.substr(pos + 1, sz(str) - pos) << " ";
-		input >> str;
-		out << str << endl;
+	// ios::sync_with_stdio(false);
 
-		if(++cntSentences % 100) out << flush;
+	wifstream in("data\\sentences.txt", wifstream::in);
+	wofstream out("data\\test.txt", wofstream::out);
+	setlocale(LC_ALL, "chs");
+
+	Segment::init();
+	wstring line;
+	while(getline(in, line)) {
+		wstring result = Segment::slowSegment(line);
+		out << result << endl;
+		out << flush;
 	}
+
 	in.close(), out.close();
 	return 0;
 }

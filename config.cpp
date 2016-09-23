@@ -1,3 +1,4 @@
+vector<int> Global::symbols;
 ll Global::totWords;
 
 void Global::loadSymbols() {
@@ -15,7 +16,7 @@ void Global::loadSymbols() {
 	in.close();
 }
 
-bool isSymbol(const int code) {
+bool Global::isSymbol(const int code) {
 	vector<int>::iterator it = lower_bound(all(symbols), code);
 	if(it != symbols.end() && *it == code) return true;
 	return false;
@@ -25,20 +26,48 @@ void Global::toArray(const wstring &data, int *w, int &n) {
 	n = 0;
 	for(int i = 0, len = sz(data); i < len; ++i) {
 		int x = (int) data[i];
-		if(x > 128 && i < len - 1)
-			x = (x << 8) | ((int) data[++i]);
+		// if(x > 128 && x < 256 && i < len - 1)
+		// 	x = (x << 8) | ((int) data[++i]);
 		w[n++] = x;
 	}
 }
 
-void Global::loadGlossary(map<int, int> &ret, map<int, int> &counts) {
-	wifstream in(GLOSSARY, wifstream::in);
+wstring Global::toWstring(const int *w, int len) {
+	wstring ret;
+	for(int i = 0; i < len; ++i) {
+		wstring now;
+		now.push_back((wchar_t) w[i]);
+		// for(int x = w[i]; x; x >>= 8)
+		//  	now.push_back((wchar_t) (x & 255));
+		reverse(all(now));
+		ret += now;
+	}
+	return ret;
+}
+
+wstring Global::toWstring(const int state) {
+	wstring ret;
+	ret.push_back((wchar_t) state);
+	// for(int x = state; x; x >>= 8)
+	// 	ret.push_back((wchar_t) (x & 255));
+	reverse(all(ret));
+	return ret;
+}
+
+void Global::loadGlossary(map<wstring, int> &ret, 
+		map<int, int> &counts) {
+	wifstream inpu("data\\glossary.txt", wifstream::in);
 	ret.clear(), counts.clear();
 
 	wstring line;
 	int totWord = 0;
 	totWords = 0;
-	while(getline(in, line)) {
+
+	static int pp[1234], n;
+
+	while(getline(inpu, line)) {
+		output << line << endl;
+
 		wstring word;
 		int x;
 		wstringstream input(line, wstringstream::in);
@@ -48,11 +77,11 @@ void Global::loadGlossary(map<int, int> &ret, map<int, int> &counts) {
 		counts[ret[word]] += x;
 	}
 
-	in.close();
+	inpu.close();
 }
 
-void Global::loadRelation(map<Related, int>, int> &ret, 
-		const map<int, int> &index) {
+void Global::loadRelation(map<Related, int> &ret, 
+		map<wstring, int> &index) {
 	wifstream in(RELATIONSHIP, wifstream::in);
 	ret.clear();
 
@@ -69,7 +98,7 @@ void Global::loadRelation(map<Related, int>, int> &ret,
 	in.close();
 }
 
-void Global::loadAll(map<int, int> &index, map<int, int> counts, 
+void Global::loadAll(map<wstring, int> &index, map<int, int> &counts, 
 		map<Related, int> &relation) {
 	loadSymbols();
 	loadGlossary(index, counts);

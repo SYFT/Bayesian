@@ -85,7 +85,7 @@ int main() {
 			if(p > baselimit && w->second > 150) {
 				for(int i = 0; i < len; ++i)
 					out << (wchar_t) a[i];
-				out << " " << ++countwords << " " << p << " " << w->second << endl;
+				out << " " << w->second << endl;
 				out << flush;
 
 				int b[4], idx = 0;

@@ -2,6 +2,7 @@
 /resources/*
 /data/*
 /result/*
+/testdata/*
 *.swp
 *.cpp~
 *.gitignore~
